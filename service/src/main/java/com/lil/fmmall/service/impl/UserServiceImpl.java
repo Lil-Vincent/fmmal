@@ -3,6 +3,7 @@ package com.lil.fmmall.service.impl;
 import com.lil.fmmall.dao.UsersMapper;
 import com.lil.fmmall.entity.Users;
 import com.lil.fmmall.service.UserService;
+import com.lil.fmmall.util.Base64Utils;
 import com.lil.fmmall.util.MD5Utils;
 import com.lil.fmmall.vo.ResStatus;
 import com.lil.fmmall.vo.ResultVO;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 
@@ -67,7 +69,9 @@ public class UserServiceImpl implements UserService {
             System.out.println(pwd);
             String pwd1 = MD5Utils.md5(pwd);
             if (pwd1.equals(user.get(0).getPassword())) {
-                return new ResultVO(ResStatus.OK, "登录成功", user);
+                //登录成功
+                String token = Base64Utils.encode(name+"QIANfeng6666");
+                return new ResultVO(ResStatus.OK,token,user.get(0));
             }else {
                 return new ResultVO(ResStatus.NO, "登录失败，密码错误", null);
             }

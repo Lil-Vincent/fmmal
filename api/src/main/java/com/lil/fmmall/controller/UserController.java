@@ -3,6 +3,8 @@ package com.lil.fmmall.controller;
 import com.lil.fmmall.entity.Users;
 import com.lil.fmmall.service.UserService;
 import com.lil.fmmall.service.impl.UserServiceImpl;
+import com.lil.fmmall.util.Base64Utils;
+import com.lil.fmmall.vo.ResStatus;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.lil.fmmall.vo.ResultVO;
 
+import java.sql.ResultSet;
 
 
 /**
@@ -26,7 +29,7 @@ public class UserController {
     private UserServiceImpl userService;
 
 
-    @GetMapping("//Users/liaoxiaowen/IdeaProjects/springboot商城/商城/fmall-static/login.htmllogin")
+    @GetMapping("/login")
     public ResultVO login(String name, String pwd) {
         ResultVO resultVO = userService.checkLogin(name, pwd);
         return resultVO;
@@ -37,4 +40,5 @@ public class UserController {
         ResultVO resultVO = userService.userRegister(users.getUsername(), users.getPassword());
         return resultVO;
     }
+
 }
