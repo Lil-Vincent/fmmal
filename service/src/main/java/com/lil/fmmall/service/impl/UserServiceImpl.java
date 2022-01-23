@@ -3,16 +3,20 @@ package com.lil.fmmall.service.impl;
 import com.lil.fmmall.dao.UsersMapper;
 import com.lil.fmmall.entity.Users;
 import com.lil.fmmall.service.UserService;
-import com.lil.fmmall.util.Base64Utils;
+
 import com.lil.fmmall.util.MD5Utils;
 import com.lil.fmmall.vo.ResStatus;
 import com.lil.fmmall.vo.ResultVO;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
-import java.io.UnsupportedEncodingException;
+
+import javax.annotation.Resource;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -22,7 +26,7 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
+    @Resource
     private UsersMapper usersMapper;
 
     @Override
@@ -70,7 +74,17 @@ public class UserServiceImpl implements UserService {
             String pwd1 = MD5Utils.md5(pwd);
             if (pwd1.equals(user.get(0).getPassword())) {
                 //登录成功
-                String token = Base64Utils.encode(name+"QIANfeng6666");
+                JwtBuilder builder = Jwts.builder();
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("key1", "value1");
+                map.put("key2", "value2");
+                String token = builder.setSubject(name)
+                        .setIssuedAt(new Date())
+                        .setId(user.get(0).getUserId() + "")
+                        .setClaims(map)
+                        .setExpiration(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
+                        .signWith(SignatureAlgorithm.HS256,"QIANfeng6666")
+                        .compact();
                 return new ResultVO(ResStatus.OK,token,user.get(0));
             }else {
                 return new ResultVO(ResStatus.NO, "登录失败，密码错误", null);
