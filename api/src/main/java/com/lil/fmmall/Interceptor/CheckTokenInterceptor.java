@@ -21,7 +21,7 @@ public class CheckTokenInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String method = request.getMethod();
-        if ("OPTIONs".equalsIgnoreCase(method)) {
+        if ("OPTIONS".equalsIgnoreCase(method)) {
             return true;
         }
 
